@@ -10,6 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.io.File;
 
 
 
@@ -56,17 +57,19 @@ public class Duke  extends Application{
             tasklist = new TaskList(readInput(storage.readFile()));
         }
         catch (Exception e){
-            throw new FileNotFoundException("No File Found!");
+            File fileNAME = new File(FILE_NAME);
+            tasklist = new TaskList(new ArrayList<>());
         }
     }
 
 
     public static void main(String[] args) throws FileNotFoundException {
-        assert(FILE_NAME != null); // check user image exists
-        assert(FILE_PATH != null); // check duke image exists
-        Duke duke = new Duke(FILE_NAME,FILE_NAME);
+        assert(FILE_NAME != null);
+        assert(FILE_PATH != null);
+        Duke duke = new Duke(FILE_NAME,FILE_PATH);
         Scanner sc = new Scanner(System.in);
         String word = sc.nextLine();
+        System.out.println(word);
         while(sc.hasNext()) {
             duke.doCommand(word);
             word = sc.nextLine();
@@ -329,48 +332,55 @@ public class Duke  extends Application{
     }
 
     public String doCommand(String word){
-        String[] pre = word.split(REGEX_SPACE);
-        String response = "";
-        switch (pre[0]) {
-            case "bye":
-                return "Good Bye~~";
-            case "list" :
-                response = Duke.printTasks(tasklist);
-                storage.writeTasks(tasklist);
-                break;
-            case "done" :
-                int n = parseInt(pre[1]) - 1;
-                response = doneTask(tasklist, n);
-                storage.writeTasks(tasklist);
-                break;
-            case "delete" :
-                n = parseInt(pre[1]) - 1;
-                response = deleteTask(tasklist, n);
-                storage.writeTasks(tasklist);
-                break;
-            case "deadline" :
-                response = addDeadline(tasklist, word);
-                storage.writeTasks(tasklist);
-                break;
-            case "event" :
-                response = addEvent(tasklist, word);
-                storage.writeTasks(tasklist);
-                break;
-            case "todo" :
-                response = addToDo(tasklist, pre);
-                storage.writeTasks(tasklist);
-                break;
-            case "find" :
-                response = findTasks(tasklist,pre[1]);
-                break;
-            case "sort":
-                response = sort(tasklist);
-                storage.writeTasks(tasklist);
-                break;
-            default :
-                 response = addError();
+            String response = "";
+            if (word == null) {
+                response = "kontol";
+                return response;
+            }
+            String[] pre = word.split(REGEX_SPACE);
+
+            switch (pre[0]) {
+                case "bye":
+                    return "Good Bye~~";
+                case "list":
+                    response = Duke.printTasks(tasklist);
+                    storage.writeTasks(tasklist);
+                    break;
+                case "done":
+                    int n = parseInt(pre[1]) - 1;
+                    response = doneTask(tasklist, n);
+                    storage.writeTasks(tasklist);
+                    break;
+                case "delete":
+                    n = parseInt(pre[1]) - 1;
+                    response = deleteTask(tasklist, n);
+                    storage.writeTasks(tasklist);
+                    break;
+                case "deadline":
+                    response = addDeadline(tasklist, word);
+                    storage.writeTasks(tasklist);
+                    break;
+                case "event":
+                    response = addEvent(tasklist, word);
+                    storage.writeTasks(tasklist);
+                    break;
+                case "todo":
+                    response = addToDo(tasklist, pre);
+                    storage.writeTasks(tasklist);
+                    break;
+                case "find":
+                    response = findTasks(tasklist, pre[1]);
+                    break;
+                case "sort":
+                    response = sort(tasklist);
+                    storage.writeTasks(tasklist);
+                    break;
+                default:
+                    response = addError();
             }
             return response;
+
+
     }
     public static String printTasks(TaskList tasks) {
         String response = "Here are the tasks in your list:\n";
