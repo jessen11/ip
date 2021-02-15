@@ -31,6 +31,7 @@ public class MainWindow extends AnchorPane {
     }
 
     public void setDuke(Duke d) {
+        assert(d != null);
         duke = d;
     }
 
@@ -41,14 +42,13 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = getResponse(input);
+        String response = duke.doCommand(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getDukeDialog(response, dukeImage)
         );
         userInput.clear();
         checkExit(input);
-
     }
 
     private void checkExit(String input) {
@@ -58,7 +58,4 @@ public class MainWindow extends AnchorPane {
         }
     }
 
-    private String getResponse(String input) {
-        return duke.doCommand(input);
-    }
 }

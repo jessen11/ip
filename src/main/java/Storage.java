@@ -27,7 +27,7 @@ public class Storage {
      * @param path path of file.
      * @return directory path
      */
-    public String makeDirectory(String path) {
+    public static String makeDirectory(String path) {
         File file = new File(path);
         file.mkdirs();
         if (!file.isDirectory()) {
@@ -74,4 +74,5 @@ public class Storage {
             throw new FileNotFoundException("No File");
         }
     }
+
 }

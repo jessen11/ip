@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,10 +22,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            duke = new Duke(FILE_PATH, FILE_NAME);
+            String filePATH = Storage.makeDirectory(FILE_PATH);
+            File fileNAME = new File(FILE_NAME);
+            duke = new Duke(filePATH, FILE_NAME);
         }
         catch (FileNotFoundException e){
-            System.out.println("error");
+            System.out.println("Error!");
         }
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
@@ -37,4 +40,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
+
 }
